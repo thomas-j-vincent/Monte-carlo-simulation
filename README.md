@@ -1,1 +1,3 @@
 # Monte-carlo-simulation
+
+The Monte-carlo simulation is a method of predicting outcomes using random numbers by running numerous simulations and taking a mean of the results, the main concept being using randomness to solve deterministic(problems where no randomness is involved) problems. It is used to "brute-force" solutions to problems too complex to solve via mathematical analysis, under the topics; optimisation, numerical integration and probability distribution such as the number of Pi. 
