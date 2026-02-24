@@ -3,27 +3,81 @@ import matplotlib
 import matplotlib.pyplot as plt
 import time
 
-lower_bust = 31.235
-higher_profit = 63.208
-
-sampleSize = 1000
-startingFunds = 10000
-wagerSize = 100
-wagerCount = 100
-
 def rollDice():
     roll = random.randint(1,100)
 
-    if roll == 100:
-        #print(roll, "roll was 100, you lose - what are the odds? Play again!")
-        return False
-    elif roll <= 50:
+    if roll <= 50: #50/50 odds
         #print(roll, "roll was 1-50, you lose. Play again!")
         return False
 
-    elif 100 > roll > 50:
+    elif roll >= 51:
         #print(roll, "roll was 51-99, you win!")
         return True
+
+def dAlembert(funds, initial_wager, wager_count):
+    global Ret #return
+    global da_busts # 
+    global da_profits
+
+    value = funds
+    wager = initial_wager
+    currentWager = 1
+    previousWager = "win"
+    previousWagerAmount = initial_wager
+
+    while currentWager <= wager_count:
+        if previousWager == "win":
+            if wager == initial_wager:
+                pass
+            else:
+                wager -= initial_wager
+
+            #print("current wager:", wager, "value:", value)
+
+            if rollDice():
+                value += wager
+                #print("we won, current value:", value)
+                previousWagerAmount = wager
+            else:
+                value -= wager
+                previousWager = "loss"
+                #print("we lost, current value:", value)
+                previousWagerAmount = wager
+
+                if value <= 0:
+                    da_busts += 1
+                    break
+
+        elif previousWager == "loss":
+            wager = previousWagerAmount + initial_wager
+            if (value - wager) <= 0:
+                wager = value
+            #print("we lost the last wager, current wager:", wager, "value:", value )
+
+            if rollDice():
+                value += wager
+                #print("we won, current value:", value)
+                previousWagerAmount = wager
+                previousWager = "win"
+
+            else:
+                value -= wager
+                #print("we lost, current value:", value)
+                previousWagerAmount = wager
+
+                if value <= 0:
+                    da_busts += 1
+                    break
+
+        currentWager += 1
+
+    if value > funds:
+        da_profits += 1
+
+    #print(value)
+
+    Ret += value
+
 
 def multiple_bettor(funds, initial_wager, wager_count, colour):
     global multiple_busts
@@ -200,7 +254,46 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
         value = 0
         simple_profits += 1
 
+random_multiple = random.uniform(0.1, 10.0)
 x = 0
+lower_bust = 31.235
+higher_profit = 63.208
+
+
+sampleSize = 1000
+startingFunds = 100000
+
+while True:
+
+    #wagerSize = 100
+    #wagerCount = 100000
+    wagerSize = random.uniform(1.0, 1000.00)
+    wagerCount = random.uniform(10.0, 10000)
+
+    Ret = 0.0
+    da_busts = 0.0
+    da_profits = 0.0
+    daSampSize = 10000
+    counter = 1
+
+    while counter <= daSampSize:
+        dAlembert(startingFunds, wagerSize, wagerCount)
+        counter += 1
+    ROI = Ret - (daSampSize* startingFunds)
+    totalInvested = daSampSize*startingFunds
+
+    percentROI = (ROI/totalInvested) * 100.00
+
+    print("percent ROI:", percentROI)
+    print("total invested:", daSampSize* startingFunds)
+    print("total return:", Ret)
+    print("ROI", Ret - (daSampSize* startingFunds))
+    print("bust rate", (da_busts/daSampSize)* 100.00)
+    print("profit rate", (da_profits/daSampSize)* 100.00)
+    print("wager size:", wagerSize)
+    print("wager count:", wagerCount)
+    print("wager size percentage:", (wagerSize/startingFunds)*100)
+'''
 while True:
 #simple_busts = 0.0
 #doubler_busts = 0.0
@@ -227,17 +320,18 @@ while True:
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     else: 
         pass
-        '''print("#########################################################################################")
+        print("#########################################################################################")
         print("found loser, the multiple was:", random_multiple)
         print("higher profit to beat", higher_profit)
         print("bust rate:", (multiple_busts/multipleSampleSize)* 100.00)
         print("profit rate:", (multiple_profits/multipleSampleSize)* 100.00)
         print("#########################################################################################")
-'''
+
 #while x < sampleSize: # sample size
  #   simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
  #   doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
-'''x+=1
+x+=1
+
 
 print("Simple bettor bust chance:", (simple_busts/sampleSize) * 100.00)
 print("Doubler bettor bust chance:", (doubler_busts/sampleSize) * 100.00)
@@ -247,4 +341,5 @@ print("doubler bettor profit chances:", (doubler_profits/sampleSize) * 100.00)
 plt.axhline (0, color = "r")
 plt.ylabel("Account Value")
 plt.xlabel("wager Count")
-plt.show()'''
+plt.show()
+'''
