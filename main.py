@@ -3,7 +3,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import time
 
-sampleSize = 1
+sampleSize = 1000
 startingFunds = 10000
 wagerSize = 100
 wagerCount = 1000
@@ -160,7 +160,7 @@ def doubler_bettor(funds, initial_wager, wager_count, colour):
     #print(value)
     plt.plot(wX,vY)
 
-xx = 0
+'''xx = 0
 broke_count = 0
 
 while xx < 1000:
@@ -172,9 +172,8 @@ print("survival rate:", 100 - (broke_count/float(xx))* 100)
 
 plt.axhline (0, color = "r")
 plt.show()
-time.sleep(555)
 
-
+'''
 
 
 def simple_bettor(funds, initial_wager, wager_count, colour):
@@ -182,7 +181,7 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
     global simple_profits
     value = funds
     wager = initial_wager
-
+    global broke_count
     wX = []
     vY = []
 
@@ -202,6 +201,7 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
 
     if value <= 0:
         value = 0
+        broke_count += 1
         simple_busts += 1
     #print("funds:", value)
 
@@ -211,16 +211,18 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
         simple_profits += 1
 
 x = 0
+broke_count = 0
 simple_busts = 0.0
 doubler_busts = 0.0
 simple_profits = 0.0
 doubler_profits = 0.0
 
 while x < sampleSize: # sample size
-    #simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
-    doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
+    simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
+    #doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
     x+=1
-
+print("death rate", (broke_count/float(x))* 100)
+print("survival rate:", 100 - (broke_count/float(x))* 100)
 print("Simple bettor bust chance:", (simple_busts/sampleSize) * 100.00)
 print("Doubler bettor bust chance:", (doubler_busts/sampleSize) * 100.00)
 
