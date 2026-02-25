@@ -279,20 +279,46 @@ while True:
     while counter <= daSampSize:
         dAlembert(startingFunds, wagerSize, wagerCount)
         counter += 1
+
     ROI = Ret - (daSampSize* startingFunds)
     totalInvested = daSampSize*startingFunds
 
     percentROI = (ROI/totalInvested) * 100.00
+    wagerSizePercent = (wagerSize/startingFunds) * 100.00
 
-    print("percent ROI:", percentROI)
-    print("total invested:", daSampSize* startingFunds)
-    print("total return:", Ret)
-    print("ROI", Ret - (daSampSize* startingFunds))
-    print("bust rate", (da_busts/daSampSize)* 100.00)
-    print("profit rate", (da_profits/daSampSize)* 100.00)
-    print("wager size:", wagerSize)
-    print("wager count:", wagerCount)
-    print("wager size percentage:", (wagerSize/startingFunds)*100)
+    if percentROI > 1:
+        print("_________________________________________________________")
+        print("percent ROI:", percentROI)
+        print("total invested:", daSampSize* startingFunds)
+        print("total return:", Ret)
+        print("ROI", Ret - (daSampSize* startingFunds))
+        print("bust rate", (da_busts/daSampSize)* 100.00)
+        print("profit rate", (da_profits/daSampSize)* 100.00)
+        print("wager size:", wagerSize)
+        print("wager count:", wagerCount)
+        print("wager size percentage:", (wagerSize/startingFunds)*100)
+
+        saveFile = open("monteCarloLiberal.csv", "a")
+        saveLine = "\n" + str(percentROI) + "," + str(wagerSizePercent)+ "," + str(wagerCount)+ ",g"
+        saveFile.write(saveLine)
+        saveFile.close()
+
+    elif percentROI > -1:
+        print("_________________________________________________________")
+        print("percent ROI:", percentROI)
+        print("total invested:", daSampSize* startingFunds)
+        print("total return:", Ret)
+        print("ROI", Ret - (daSampSize* startingFunds))
+        print("bust rate", (da_busts/daSampSize)* 100.00)
+        print("profit rate", (da_profits/daSampSize)* 100.00)
+        print("wager size:", wagerSize)
+        print("wager count:", wagerCount)
+        print("wager size percentage:", (wagerSize/startingFunds)*100)
+
+        saveFile = open("monteCarloLiberal.csv", "a")
+        saveLine = "\n" + str(percentROI) + "," + str(wagerSizePercent)+ "," + str(wagerCount)+ ",r"
+        saveFile.write(saveLine)
+        saveFile.close()
 '''
 while True:
 #simple_busts = 0.0
