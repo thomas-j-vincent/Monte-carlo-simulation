@@ -1,3 +1,8 @@
+'''
+Takes the csv files generated from the monte-carlo models and graphs them to a 3d chart, 
+just uncomment the line with the file you want to read from and comment out the others
+'''
+
 import matplotlib
 import matplotlib.pyplot as plt
 import csv
@@ -7,7 +12,9 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 
 def graph():
-    with open("monteCarloLiberal.csv","r") as montecarlo:
+    #with open("monteCarloLiberal.csv","r") as montecarlo:
+    #with open("monteCarloLiberal.csv","r") as montecarlo:
+    with open("monteCarlo-dAlembert.csv","r") as montecarlo:
         datas = csv.reader(montecarlo, delimiter=",")
 
         for eachLine in datas:
