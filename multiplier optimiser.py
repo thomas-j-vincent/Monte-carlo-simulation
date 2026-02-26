@@ -9,14 +9,18 @@ wagerSize = 100
 wagerCount = 100000
 
 
-def rollDice(): #?????????? is his still different?
+def rollDice():
     roll = random.randint(1,100)
 
-    if roll <= 50: #50/50 odds
+    if roll == 100:
+        return False
+
+
+    elif roll <= 50: #50/50 odds
         #print(roll, "roll was 1-50, you lose. Play again!")
         return False
 
-    elif roll >= 51:
+    elif 100 > roll > 50:
         #print(roll, "roll was 51-99, you win!")
         return True
 
