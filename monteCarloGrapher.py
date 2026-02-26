@@ -13,7 +13,7 @@ ax = fig.add_subplot(111, projection="3d")
 
 def graph():
     #with open("monteCarloLiberal.csv","r") as montecarlo:
-    #with open("monteCarloLiberal.csv","r") as montecarlo:
+    #with open("monteCarlo-multiplierOptimiser.csv","r") as montecarlo:
     with open("monteCarlo-dAlembert.csv","r") as montecarlo:
         datas = csv.reader(montecarlo, delimiter=",")
 

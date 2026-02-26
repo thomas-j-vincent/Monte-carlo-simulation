@@ -107,20 +107,26 @@ while True:
     while currentSample <= multipleSampleSize:
         multiple_bettor(startingFunds, wagerSize, wagerCount)
         currentSample += 1
-
+        profit_rate = (multiple_profits/multipleSampleSize)* 100.00
+        bust_rate = (multiple_busts/multipleSampleSize)* 100.00
     if ((multiple_busts/multipleSampleSize) * 100.00 < lower_bust) and ((multiple_profits/multipleSampleSize)* 100.00 > higher_profit):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("found winner, the multiple was:", random_multiple)
         print("lower bust to beat", lower_bust)
         print("higher profit to beat", higher_profit)
-        print("bust rate:", (multiple_busts/multipleSampleSize)* 100.00)
-        print("profit rate:", (multiple_profits/multipleSampleSize)* 100.00)
+        print("bust rate:", bust_rate)
+        print("profit rate:", profit_rate)
+        saveFile = open("monteCarlo-multiplierOptimiser.csv", "a")
+        saveLine = "\n" + str(random_multiple) + "," + str(bust_rate)+ "," + str(profit_rate)+ ",g"
+        saveFile.write(saveLine)
+        saveFile.close()
+        print("file closed")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     else: 
         pass
         print("#########################################################################################")
         print("found loser, the multiple was:", random_multiple)
         print("higher profit to beat", higher_profit)
-        print("bust rate:", (multiple_busts/multipleSampleSize)* 100.00)
-        print("profit rate:", (multiple_profits/multipleSampleSize)* 100.00)
+        print("bust rate:", bust_rate)
+        print("profit rate:", profit_rate)
         print("#########################################################################################")
