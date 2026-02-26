@@ -1,7 +1,15 @@
 # optimise multiplier
 import random
 
-def rollDice():
+lower_bust = 31.235
+higher_profit = 63.208
+
+startingFunds = 100000
+wagerSize = 100
+wagerCount = 100000
+
+
+def rollDice(): #?????????? is his still different?
     roll = random.randint(1,100)
 
     if roll <= 50: #50/50 odds
@@ -12,13 +20,15 @@ def rollDice():
         #print(roll, "roll was 51-99, you win!")
         return True
 
-def multiple_bettor(funds, initial_wager, wager_count, colour):
+def multiple_bettor(funds, initial_wager, wager_count):
     global multiple_busts
     global multiple_profits
+
     value = funds
     wager = initial_wager
     wX = []
     vY = []
+
     currentWager = 1
     previousWager = "win"
     previousWagerAmount = initial_wager
@@ -81,5 +91,32 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
     if value > funds: 
         multiple_profits += 1
 
+while True:
 
-random_multiple = random.uniform(0.1, 10.0)
+    multiple_busts = 0.0
+    multiple_profits = 0.0
+    multipleSampleSize = 100000
+    currentSample = 1
+
+    random_multiple = random.uniform(0.1, 10.0)
+
+    while currentSample <= multipleSampleSize:
+        multiple_bettor(startingFunds, wagerSize, wagerCount)
+        currentSample += 1
+
+    if ((multiple_busts/multipleSampleSize) * 100.00 < lower_bust) and ((multiple_profits/multipleSampleSize)* 100.00 > higher_profit):
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("found winner, the multiple was:", random_multiple)
+        print("lower bust to beat", lower_bust)
+        print("higher profit to beat", higher_profit)
+        print("bust rate:", (multiple_busts/multipleSampleSize)* 100.00)
+        print("profit rate:", (multiple_profits/multipleSampleSize)* 100.00)
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    else: 
+        pass
+        print("#########################################################################################")
+        print("found loser, the multiple was:", random_multiple)
+        print("higher profit to beat", higher_profit)
+        print("bust rate:", (multiple_busts/multipleSampleSize)* 100.00)
+        print("profit rate:", (multiple_profits/multipleSampleSize)* 100.00)
+        print("#########################################################################################")
