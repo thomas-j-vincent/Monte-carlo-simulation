@@ -1,6 +1,7 @@
 import random
 import matplotlib 
 import matplotlib.pyplot as plt
+import csv
 
 def rollDice():
     roll = random.randint(1,100)
@@ -15,6 +16,25 @@ def rollDice():
     elif 100 >roll > 50:
         #print(roll, "roll was 51-99, you win!")
         return True
+
+def findOptimum():
+
+    best_multiplier = None
+    best_score = float('-inf')
+
+    with open("monteCarlo-multiplierOptimiser.csv","r") as file:
+        datas = csv.reader(file, delimiter=",")
+        for eachLine in datas:
+            multiplier = float(eachLine[0])
+            score = (float(eachLine[2]) - float(eachLine[1]))
+
+            if score > best_score:
+                best_score = score
+                best_multiplier = multiplier
+    
+    return best_multiplier
+
+best_multiplier = findOptimum()
 
 def doubler_bettor(funds, initial_wager, wager_count, colour):
     global doubler_busts
@@ -126,6 +146,8 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
 
     value = funds
     wager = initial_wager
+    wX = []
+    vY = []
 
     currentWager = 1
     previousWager = "win"
@@ -135,8 +157,12 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
         if previousWager ==  "win":
             if rollDice():
                 value+=wager
+                wX.append(currentWager)
+                vY.append(value)
             else:
                 value -= wager
+                wX.append(currentWager)
+                vY.append(value)
                 previousWager = "loss"
                 previousWagerAmount = wager
                 if value < 0:
@@ -145,18 +171,22 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
 
         elif previousWager == "loss":
             if rollDice():
-                wager = previousWagerAmount * random_multiple
+                wager = previousWagerAmount * best_multiplier
 
                 if (value - wager) < 0:
                     wager = value
                 value += wager
+                wX.append(currentWager)
+                vY.append(value)
                 wager = initial_wager
                 previousWager = "win"
             else: 
-                wager = previousWagerAmount * random_multiple
+                wager = previousWagerAmount * best_multiplier
                 if (value - wager) < 0:
                     wager = value
                 value -= wager
+                wX.append(currentWager)
+                vY.append(value)
                 previousWagerAmount = wager
                 if value <= 0:
                     multiple_busts += 1
@@ -165,7 +195,7 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
                 previousWager = "loss"
 
         currentWager += 1
-
+    plt.plot(wX, vY)
     if value > funds: 
         multiple_profits += 1
 
