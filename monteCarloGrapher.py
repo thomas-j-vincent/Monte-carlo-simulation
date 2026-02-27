@@ -10,11 +10,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
+#filename = "monteCarlo-dAlembert.csv"
+filename = "monteCarlo-multiplierOptimiser.csv"
+#filename = "monteCarlo-dAlembert.csv"
 
 def graph():
-    #with open("monteCarloLiberal.csv","r") as montecarlo:
-    #with open("monteCarlo-multiplierOptimiser.csv","r") as montecarlo:
-    with open("monteCarlo-dAlembert.csv","r") as montecarlo:
+    with open(filename,"r") as montecarlo:
         datas = csv.reader(montecarlo, delimiter=",")
 
         for eachLine in datas:
@@ -25,9 +26,15 @@ def graph():
 
             ax.scatter(wagerSizePercent,wagerCount,percentROI,color=pcolor)
 
-            ax.set_xlabel("wager percent size")
-            ax.set_ylabel("wager count")
-            ax.set_zlabel("percent ROI")
+            if filename == "monteCarlo-dAlembert.csv":
+                ax.set_xlabel("wager percent size")
+                ax.set_ylabel("wager count")
+                ax.set_zlabel("percent ROI")
+
+            elif filename == "monteCarlo-multiplierOptimiser.csv":
+                ax.set_xlabel("multiple")
+                ax.set_ylabel("bust rate")
+                ax.set_zlabel("profit rate")
 
     plt.show()
 

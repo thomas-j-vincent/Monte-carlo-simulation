@@ -8,7 +8,7 @@ higher_profit = 63.208
 
 startingFunds = 100000
 wagerSize = 100
-wagerCount = 100000
+wagerCount = 100
 
 
 def rollDice():
@@ -32,8 +32,8 @@ def multiple_bettor(funds, initial_wager, wager_count):
 
     value = funds
     wager = initial_wager
-    wX = []
-    vY = []
+    #wX = []
+    #vY = []
 
     currentWager = 1
     previousWager = "win"
@@ -45,15 +45,15 @@ def multiple_bettor(funds, initial_wager, wager_count):
             if rollDice():
                 value+=wager
                 #print(value)
-                wX.append(currentWager)
-                vY.append(value)
+                #wX.append(currentWager)
+                #vY.append(value)
             else:
                 value -= wager
                 previousWager = "loss"
                 #print(value)
                 previousWagerAmount = wager
-                wX.append(currentWager)
-                vY.append(value)
+                #wX.append(currentWager)
+                #vY.append(value)
                 if value < 0:
                     #print("we went broke", currentWager, "bets")
                     multiple_busts += 1
@@ -71,8 +71,8 @@ def multiple_bettor(funds, initial_wager, wager_count):
                 #print(value)
                 wager = initial_wager
                 previousWager = "win"
-                wX.append(currentWager)
-                vY.append(value)
+                #wX.append(currentWager)
+                #vY.append(value)
             else: 
                 wager = previousWagerAmount * random_multiple
                 if (value - wager) < 0:
@@ -80,8 +80,8 @@ def multiple_bettor(funds, initial_wager, wager_count):
                 #print("we lost", wager)
                 value -= wager
                 previousWagerAmount = wager
-                wX.append(currentWager)
-                vY.append(value)
+                #wX.append(currentWager)
+                #vY.append(value)
                 if value <= 0:
                     #print("we went broke after", currentWager, "bets")
                     multiple_busts += 1
@@ -101,7 +101,7 @@ while True:
 
     multiple_busts = 0.0
     multiple_profits = 0.0
-    multipleSampleSize = 100000
+    multipleSampleSize = 10000
     currentSample = 1
 
     random_multiple = random.uniform(0.1, 10.0)
@@ -124,19 +124,20 @@ while True:
         saveFile.write(saveLine)
         saveFile.close()
         print("file closed")
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        #print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     else: 
-        #pass
-        print("#########################################################################################")
+        pass
+        #print("#########################################################################################")
         profit_rate = (multiple_profits/multipleSampleSize)* 100.00
         bust_rate = (multiple_busts/multipleSampleSize)* 100.00
-        print("found loser, the multiple was:", random_multiple)
-        print("higher profit to beat", higher_profit)
-        print("bust rate:", bust_rate)
-        print("profit rate:", profit_rate)
-        saveFile = open("monteCarlo-multiplierOptimiser.csv", "a")
-        saveLine = "\n" + str(random_multiple) + "," + str(bust_rate)+ "," + str(profit_rate)+ ",r"
-        saveFile.write(saveLine)
-        saveFile.close()
-        print("file closed")
-        print("#########################################################################################")
+        #print("found loser, the multiple was:", random_multiple)
+        #print("higher profit to beat", higher_profit)
+        #print("bust rate:", bust_rate)
+        #print("profit rate:", profit_rate)
+        if (bust_rate or profit_rate) != (100.00 or 0.0):
+            saveFile = open("monteCarlo-multiplierOptimiser.csv", "a")
+            saveLine = "\n" + str(random_multiple) + "," + str(bust_rate)+ "," + str(profit_rate)+ ",r"
+            saveFile.write(saveLine)
+            saveFile.close()
+        #print("file closed")
+        #print("#########################################################################################")'''
