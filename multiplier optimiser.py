@@ -1,4 +1,3 @@
-# optimise multiplier
 import random
 
 print("starting...")
@@ -19,11 +18,9 @@ def rollDice():
 
 
     elif roll <= 50: #50/50 odds
-        #print(roll, "roll was 1-50, you lose. Play again!")
         return False
 
     elif 100 > roll > 50:
-        #print(roll, "roll was 51-99, you win!")
         return True
 
 def multiple_bettor(funds, initial_wager, wager_count):
@@ -32,8 +29,6 @@ def multiple_bettor(funds, initial_wager, wager_count):
 
     value = funds
     wager = initial_wager
-    #wX = []
-    #vY = []
 
     currentWager = 1
     previousWager = "win"
@@ -41,59 +36,39 @@ def multiple_bettor(funds, initial_wager, wager_count):
 
     while currentWager <= wager_count:
         if previousWager ==  "win":
-            #print("we won the last wager, great")
             if rollDice():
                 value+=wager
-                #print(value)
-                #wX.append(currentWager)
-                #vY.append(value)
             else:
                 value -= wager
                 previousWager = "loss"
-                #print(value)
                 previousWagerAmount = wager
-                #wX.append(currentWager)
-                #vY.append(value)
                 if value < 0:
-                    #print("we went broke", currentWager, "bets")
                     multiple_busts += 1
                     break
 
         elif previousWager == "loss":
-            #print("Lost the last one, will double")
             if rollDice():
                 wager = previousWagerAmount * random_multiple
 
                 if (value - wager) < 0:
                     wager = value
-                #print("we won", wager)
                 value += wager
-                #print(value)
                 wager = initial_wager
                 previousWager = "win"
-                #wX.append(currentWager)
-                #vY.append(value)
             else: 
                 wager = previousWagerAmount * random_multiple
                 if (value - wager) < 0:
                     wager = value
-                #print("we lost", wager)
                 value -= wager
                 previousWagerAmount = wager
-                #wX.append(currentWager)
-                #vY.append(value)
                 if value <= 0:
-                    #print("we went broke after", currentWager, "bets")
                     multiple_busts += 1
                     break
 
-                #print(value)
                 previousWager = "loss"
 
         currentWager += 1
 
-    #print(value)
-    #plt.plot(wX,vY, colour)
     if value > funds: 
         multiple_profits += 1
 
@@ -115,29 +90,18 @@ while True:
         profit_rate = (multiple_profits/multipleSampleSize)* 100.00
         bust_rate = (multiple_busts/multipleSampleSize)* 100.00
         print("found winner, the multiple was:", random_multiple)
-        print("lower bust to beat", lower_bust)
-        print("higher profit to beat", higher_profit)
-        print("bust rate:", bust_rate)
-        print("profit rate:", profit_rate)
+        print("lower bust to beat", lower_bust, "this rate:", bust_rate)
+        print("higher profit to beat", higher_profit, "this rate:", profit_rate)
         saveFile = open("monteCarlo-multiplierOptimiser.csv", "a")
         saveLine = "\n" + str(random_multiple) + "," + str(bust_rate)+ "," + str(profit_rate)+ ",g"
         saveFile.write(saveLine)
         saveFile.close()
-        print("file closed")
-        #print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     else: 
         pass
-        #print("#########################################################################################")
         profit_rate = (multiple_profits/multipleSampleSize)* 100.00
         bust_rate = (multiple_busts/multipleSampleSize)* 100.00
-        #print("found loser, the multiple was:", random_multiple)
-        #print("higher profit to beat", higher_profit)
-        #print("bust rate:", bust_rate)
-        #print("profit rate:", profit_rate)
         if (bust_rate or profit_rate) != (100.00 or 0.0):
             saveFile = open("monteCarlo-multiplierOptimiser.csv", "a")
             saveLine = "\n" + str(random_multiple) + "," + str(bust_rate)+ "," + str(profit_rate)+ ",r"
             saveFile.write(saveLine)
             saveFile.close()
-        #print("file closed")
-        #print("#########################################################################################")'''

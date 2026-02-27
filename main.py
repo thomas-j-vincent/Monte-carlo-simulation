@@ -1,16 +1,18 @@
 import random
 import matplotlib 
 import matplotlib.pyplot as plt
-import time
 
 def rollDice():
     roll = random.randint(1,100)
+    if roll == 100:
+        #print(roll, "roll was 100, womp, womp")
+        return False
 
-    if roll <= 50: #50/50 odds
+    elif roll <= 50: #50/50 odds
         #print(roll, "roll was 1-50, you lose. Play again!")
         return False
 
-    elif roll >= 51:
+    elif 100 >roll > 50:
         #print(roll, "roll was 51-99, you win!")
         return True
 
@@ -94,9 +96,9 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
     wX = []
     vY = []
 
-    currentWager = 1
+    currentWager = 1 # ???
 
-    while currentWager <= wager_count:
+    while currentWager <= wager_count: # ??
         if rollDice():
             value += wager
             wX.append(currentWager)
@@ -118,32 +120,84 @@ def simple_bettor(funds, initial_wager, wager_count, colour):
         value = 0
         simple_profits += 1
 
-random_multiple = random.uniform(0.1, 10.0)
+def multiple_bettor(funds, initial_wager, wager_count, colour):
+    global multiple_busts
+    global multiple_profits
+
+    value = funds
+    wager = initial_wager
+
+    currentWager = 1
+    previousWager = "win"
+    previousWagerAmount = initial_wager
+
+    while currentWager <= wager_count:
+        if previousWager ==  "win":
+            if rollDice():
+                value+=wager
+            else:
+                value -= wager
+                previousWager = "loss"
+                previousWagerAmount = wager
+                if value < 0:
+                    multiple_busts += 1
+                    break
+
+        elif previousWager == "loss":
+            if rollDice():
+                wager = previousWagerAmount * random_multiple
+
+                if (value - wager) < 0:
+                    wager = value
+                value += wager
+                wager = initial_wager
+                previousWager = "win"
+            else: 
+                wager = previousWagerAmount * random_multiple
+                if (value - wager) < 0:
+                    wager = value
+                value -= wager
+                previousWagerAmount = wager
+                if value <= 0:
+                    multiple_busts += 1
+                    break
+
+                previousWager = "loss"
+
+        currentWager += 1
+
+    if value > funds: 
+        multiple_profits += 1
+
 x = 0
 
 sampleSize = 1000
 startingFunds = 100000
-
 wagerSize = 100
-wagerCount = 100000
+wagerCount = 100
 
 while True:
     simple_busts = 0.0
     doubler_busts = 0.0
+    multiple_busts = 0.0
     simple_profits = 0.0
     doubler_profits = 0.0
+    multiple_profits = 0.0
     
 
     while x < sampleSize: # sample size
         simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
         doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
+        multiple_bettor(startingFunds, wagerSize, wagerCount, "y") # x, x, number of wagers
         x+=1
 
 
     print("Simple bettor bust chance:", (simple_busts/sampleSize) * 100.00)
     print("Doubler bettor bust chance:", (doubler_busts/sampleSize) * 100.00)
+    print("Multiple bettor bust chance:", (multiple_busts/sampleSize) * 100.00)
     print("Simple bettor profit chances:", (simple_profits/sampleSize) * 100.00)
     print("doubler bettor profit chances:", (doubler_profits/sampleSize) * 100.00)
+    print("Multiple bettor profit chances:", (multiple_profits/sampleSize) * 100.00)
 
     plt.axhline (0, color = "r")
     plt.ylabel("Account Value")
