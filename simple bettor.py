@@ -24,9 +24,9 @@ def simple_bettor(funds, initial_wager, wager_count):
     wX = []
     vY = []
 
-    currentWager = 1 # ???
+    currentWager = 0 # ???
 
-    while currentWager <= wager_count: # ??
+    while currentWager <= wager_count: # How many wagers each bettor places
         if rollDice():
             value += wager
             wX.append(currentWager)
@@ -54,7 +54,7 @@ sampleSize = 1000
 startingFunds = 100000
 
 wagerSize = 100
-wagerCount = 100
+wagerCount = 100000
 
 while True:
     simple_busts = 0.0

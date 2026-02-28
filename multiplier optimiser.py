@@ -16,7 +16,6 @@ def rollDice():
     if roll == 100:
         return False
 
-
     elif roll <= 50: #50/50 odds
         return False
 

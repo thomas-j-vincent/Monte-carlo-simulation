@@ -94,7 +94,7 @@ sampleSize = 1000 # if you only want one example, set to 1
 startingFunds = 100000
 
 wagerSize = 100
-wagerCount = 100
+wagerCount = 100000
 
 while True:
     doubler_busts = 0.0

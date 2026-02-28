@@ -195,7 +195,7 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
                 previousWager = "loss"
 
         currentWager += 1
-    plt.plot(wX, vY)
+    plt.plot(wX, vY, colour)
     if value > funds: 
         multiple_profits += 1
 
@@ -218,7 +218,7 @@ while True:
     while x < sampleSize: # sample size
         simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
         doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
-        multiple_bettor(startingFunds, wagerSize, wagerCount, "y") # x, x, number of wagers
+        multiple_bettor(startingFunds, wagerSize, wagerCount, "m") # x, x, number of wagers
         x+=1
 
 
