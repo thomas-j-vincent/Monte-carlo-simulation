@@ -30,7 +30,6 @@ def dAlembert(funds, initial_wager, wager_count):
                 wager -= initial_wager
 
             #print("current wager:", wager, "value:", value)
-
             if rollDice():
                 value += wager
                 #print("we won, current value:", value)

@@ -17,24 +17,25 @@ def rollDice():
         #print(roll, "roll was 51-99, you win!")
         return True
 
-def findOptimum():
+def findOptimum(filename):
 
     best_multiplier = None
     best_score = float('-inf')
 
-    with open("monteCarlo-multiplierOptimiser.csv","r") as file:
+    with open(filename,"r") as file:
         datas = csv.reader(file, delimiter=",")
-        for eachLine in datas:
-            multiplier = float(eachLine[0])
-            score = (float(eachLine[2]) - float(eachLine[1]))
+        if filename == "monteCarlo-multiplierOptimiser.csv":
+            for eachLine in datas:
+                multiplier = float(eachLine[0])
+                score = (float(eachLine[2]) - float(eachLine[1]))
 
-            if score > best_score:
-                best_score = score
-                best_multiplier = multiplier
+                if score > best_score:
+                    best_score = score
+                    best_multiplier = multiplier
     
     return best_multiplier
 
-best_multiplier = findOptimum()
+best_multiplier = findOptimum("monteCarlo-multiplierOptimiser.csv")
 
 def doubler_bettor(funds, initial_wager, wager_count, colour):
     global doubler_busts
@@ -199,6 +200,86 @@ def multiple_bettor(funds, initial_wager, wager_count, colour):
     if value > funds: 
         multiple_profits += 1
 
+def dAlembert(funds, initial_wager, wager_count, colour):
+    #global Ret #return
+    global da_busts # 
+    global da_profits
+
+    value = funds
+    wager = initial_wager
+    wX = []
+    vY = []
+
+    currentWager = 1
+    previousWager = "win"
+    previousWagerAmount = initial_wager
+
+    while currentWager <= wager_count:
+        if previousWager == "win":
+            if wager == initial_wager:
+                pass
+            else:
+                wager -= initial_wager
+
+            #print("current wager:", wager, "value:", value)
+            if rollDice():
+                value += wager
+                #print("we won, current value:", value)
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+            else:
+                value -= wager
+                previousWager = "loss"
+                #print("we lost, current value:", value)
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+
+                if value <= 0:
+                    wX.append(currentWager)
+                    vY.append(value)
+                    da_busts += 1
+                    break
+
+        elif previousWager == "loss":
+            wager = previousWagerAmount + initial_wager
+            if (value - wager) <= 0:
+                wager = value
+            #print("we lost the last wager, current wager:", wager, "value:", value )
+                wX.append(currentWager)
+                vY.append(value)
+
+            if rollDice():
+                value += wager
+                #print("we won, current value:", value)
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+                previousWager = "win"
+
+            else:
+                value -= wager
+                #print("we lost, current value:", value)
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+
+                if value <= 0:
+                    wX.append(currentWager)
+                    vY.append(value)
+                    da_busts += 1
+                    break
+
+        currentWager += 1
+    plt.plot(wX, vY, colour)
+    if value > funds:
+        da_profits += 1
+
+    #print(value)
+
+    #Ret += value
+
 x = 0
 
 sampleSize = 1000
@@ -207,9 +288,11 @@ wagerSize = 100
 wagerCount = 100
 
 while True:
+    da_busts = 0.0
     simple_busts = 0.0
     doubler_busts = 0.0
     multiple_busts = 0.0
+    da_profits = 0.0
     simple_profits = 0.0
     doubler_profits = 0.0
     multiple_profits = 0.0
@@ -218,13 +301,16 @@ while True:
     while x < sampleSize: # sample size
         simple_bettor(startingFunds, wagerSize, wagerCount, "k") # x, x, number of wagers
         doubler_bettor(startingFunds, wagerSize, wagerCount, "c") # x, x, number of wagers
-        multiple_bettor(startingFunds, wagerSize, wagerCount, "m") # x, x, number of wagers
+        multiple_bettor(startingFunds, wagerSize, wagerCount, "r") # x, x, number of wagers
+        dAlembert(startingFunds, wagerSize, wagerCount, "g") # x, x, number of wagers
+
         x+=1
 
-
+    print("D'Alembert bettor bust chance:", (da_busts/sampleSize) * 100.00)
     print("Simple bettor bust chance:", (simple_busts/sampleSize) * 100.00)
     print("Doubler bettor bust chance:", (doubler_busts/sampleSize) * 100.00)
     print("Multiple bettor bust chance:", (multiple_busts/sampleSize) * 100.00)
+    print("D'Alembert bettor profit chances:", (da_profits/sampleSize) * 100.00)
     print("Simple bettor profit chances:", (simple_profits/sampleSize) * 100.00)
     print("doubler bettor profit chances:", (doubler_profits/sampleSize) * 100.00)
     print("Multiple bettor profit chances:", (multiple_profits/sampleSize) * 100.00)
