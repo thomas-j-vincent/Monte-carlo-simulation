@@ -6,12 +6,12 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 import yfinance as yf
 
-S = 101.15 #stock price
-K = 98.01 #strike price
-vol = 0.0991 # volatility
-r = 0.01 #risk free rate
-N = 10 # number of time steps
-M = 1000 # number of simulations (if increased error decreases)
+S = 101.15   # stock price
+K = 98.01    # strike price
+vol = 0.0991 # implied volatility (%)
+r = 0.01     # risk free rate (%)
+N = 10       # number of time steps
+M = 1000     # number of simulations (if increased the error decreases)
 
 market_value = 3.86 # market price of option
 T = ((datetime.date(2027,3,17)- datetime.date.today()).days + 1)/365 #time in years
@@ -73,7 +73,7 @@ print("Call value is ${0} with SE +/- {1}".format(np.round(C0, 2), np.round(SE, 
 
 x1 = np.linspace(C0-3*SE, C0-1*SE, 100)
 x2 = np.linspace(C0-1*SE, C0+1*SE, 100)
-x3 = np.linspace(C0+1*SE, C0+1*SE, 100)
+x3 = np.linspace(C0+1*SE, C0+3*SE, 100)
 
 s1 = stats.norm.pdf(x1, C0, SE)
 s2 = stats.norm.pdf(x2, C0, SE)
