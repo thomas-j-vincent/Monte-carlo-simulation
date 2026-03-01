@@ -33,17 +33,17 @@ First we import the required modules:
 
 This code computes the theoretical fair price of the option, if the price given is above the market price then the option may be underpriced - and a "good" deal, if the given price is below the market price the option may be overpriced - and a "bad" deal.
 
-$$`C_{0,i} = \text{exp}(- \int_0^T r_s ds)C_{T,i} = \text{exp}(-rT)C_{T,i}`$$
+$$C_{0,i} = \text{exp}(- \int_0^T r_s ds)C_{T,i} = \text{exp}(-rT)C_{T,i}$$
 for a particular simulation:
 - $`\text{exp}(- \int_0^T r_s ds)`$ is the expectation of its discounted process, where the variable for the interest rate could change
 - $`C_{T,i}`$ is the payoff at time T
 equals the exponential of the discounted rate over the time multiplied by the payoff of the individual simulation
 
 if we were to repeat the simulation $`\text{M}`$ times we can average the outcomes to:
-$$`C_{0}^{^} = \frac{1}{\text{M}} \sum_{i=1}^{\text{M}} C_{0,i}`$$
+$$C_{0}^{^} = \frac{1}{\text{M}} \sum_{i=1}^{\text{M}} C_{0,i}$$
 $`\frac{1}{\text{M}}`$ sum all of the derivative prices
 
-### Standard error: $`SE(C_{0}^{^})`$
+### Standard error: $SE(C_{0}^{^})$
 
 $`C_{0}^{^}`$ is an estimate of the true value of option $`C_0`$ with error -as we are taking the average of randomly generated samples (this means the calculation itself is random). A measure of thsi error is the deviation of $`C_{0}^{^}`$ (standard error). This standard error can be estimated as the standard deviation of the call price ($`C_{0,i}`$) divided by the number of simulated paths ($`\text{M}`$)
 
